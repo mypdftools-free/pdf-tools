@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO -->
+<title>Image to PDF Online Free | My PDF Tools</title>
+<meta name="description" content="Convert images to PDF online for free. No upload required. Fast and secure tool.">
+
+<!-- LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, Arial;
+  background: #f2f4f7;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #007bff;
+  color: white;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+  padding: 16px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* DROP AREA */
+.drop-area {
+  border: 2px dashed #007bff;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* PREVIEW */
+.preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.item {
+  width: 80px;
+  text-align: center;
+}
+
+.item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #007bff;
+  color: white;
+  font-size: 16px;
+}
+
+/* SMALL BUTTONS */
+.small-btn {
+  padding: 5px;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* SELECT */
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+/* LOADER */
+.loader {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+  color: green;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SEO H1 (hidden for Google) -->
+<h1 style="display:none;">Image to PDF Online Free</h1>
+
+<div class="navbar">🖼️ Image to PDF</div>
+
+<div class="container">
+<div class="card">
+
+<div class="drop-area" onclick="fileInput.click()">
+  Click or Drag Images
+</div>
+
+<input type="file" id="fileInput" multiple accept="image/*" hidden>
+
+<!-- PAGE SIZE -->
+<select id="pageSize">
+  <option value="a4">A4 Size</option>
+  <option value="auto">Original Size</option>
+</select>
+
+<!-- PREVIEW -->
+<div class="preview" id="preview"></div>
+
+<button onclick="convert()">Convert to PDF</button>
+
+<div class="loader" id="loader">Processing...</div>
+
+</div>
+</div>
+
+<script>
+let files = [];
+
+// FILE SELECT
+fileInput.onchange = e => {
+  files = Array.from(e.target.files);
+  showPreview();
+};
+
+// SHOW PREVIEW
+function showPreview() {
+  preview.innerHTML = "";
+
+  files.forEach((file, i) => {
+    let div = document.createElement("div");
+    div.className = "item";
+
+    let img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+
+    let del = document.createElement("button");
+    del.innerText = "❌";
+    del.className = "small-btn";
+    del.onclick = () => {
+      files.splice(i,1);
+      showPreview();
+    };
+
+    let left = document.createElement("button");
+    left.innerText = "⬅️";
+    left.className = "small-btn";
+    left.onclick = () => {
+      if(i>0){
+        [files[i],files[i-1]]=[files[i-1],files[i]];
+        showPreview();
+      }
+    };
+
+    let right = document.createElement("button");
+    right.innerText = "➡️";
+    right.className = "small-btn";
+    right.onclick = () => {
+      if(i<files.length-1){
+        [files[i],files[i+1]]=[files[i+1],files[i]];
+        showPreview();
+      }
+    };
+
+    div.appendChild(img);
+    div.appendChild(del);
+    div.appendChild(left);
+    div.appendChild(right);
+
+    preview.appendChild(div);
+  });
+}
+
+// CONVERT
+async function convert() {
+  const { jsPDF } = window.jspdf;
+
+  if(files.length===0){
+    alert("Select images");
+    return;
+  }
+
+  loader.style.display="block";
+
+  let pdf = new jsPDF();
+  let mode = document.getElementById("pageSize").value;
+
+  for(let i=0;i<files.length;i++){
+
+    let imgData = await toBase64(files[i]);
+
+    let img = new Image();
+    img.src = imgData;
+
+    await new Promise(resolve=>{
+      img.onload = function(){
+
+        if(mode==="auto"){
+          pdf = new jsPDF({
+            unit:"px",
+            format:[img.width,img.height]
+          });
+        }
+
+        let pageW = pdf.internal.pageSize.getWidth();
+        let pageH = pdf.internal.pageSize.getHeight();
+
+        let ratio = Math.min(pageW/img.width,pageH/img.height);
+
+        let w = img.width*ratio;
+        let h = img.height*ratio;
+
+        let x = (pageW-w)/2;
+        let y = (pageH-h)/2;
+
+        if(i>0) pdf.addPage();
+
+        pdf.addImage(img,"JPEG",x,y,w,h);
+
+        resolve();
+      }
+    });
+  }
+
+  loader.style.display="none";
+
+  pdf.save("images.pdf");
+}
+
+// BASE64
+function toBase64(file){
+  return new Promise(res=>{
+    let r=new FileReader();
+    r.readAsDataURL(file);
+    r.onload=()=>res(r.result);
+  });
+}
+</script>
+
+</body>
+</html>

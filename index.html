@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My PDF Tools</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Arial;
+  background: #f2f4f7;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #007bff;
+  color: white;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SEARCH */
+.search {
+  padding: 16px;
+}
+
+.search input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-size: 15px;
+}
+
+/* TOOL LIST */
+.container {
+  padding: 10px 16px 30px;
+}
+
+/* CARD */
+.card {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-decoration: none;
+  color: black;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+/* ICON */
+.icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-size: 26px;
+  color: white;
+}
+
+/* COLORS */
+.textpdf { background: #795548; }
+.img { background: #ff9800; }
+.pdf { background: #2196f3; }
+.merge { background: #4caf50; }
+.split { background: #f44336; }
+.rotate { background: #9c27b0; }
+.watermark { background: #607d8b; }
+
+/* TEXT */
+.text h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.text p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #777;
+}
+
+/* ABOUT */
+.about {
+  padding: 20px;
+  text-align: center;
+  color: #555;
+}
+
+/* DARK MODE */
+.dark {
+  background: #121212;
+}
+
+.dark .card {
+  background: #1e1e1e;
+  color: white;
+}
+
+.dark input {
+  background: #1e1e1e;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  My PDF Tools
+  <span onclick="toggleDark()" style="cursor:pointer;">🌙</span>
+</div>
+
+<!-- SEARCH -->
+<div class="search">
+  <input type="text" id="search" placeholder="Search tools..." onkeyup="searchTool()">
+</div>
+
+<!-- TOOLS -->
+<div class="container" id="tools">
+
+  <!-- 1️⃣ TEXT TO PDF -->
+  <a class="card" href="text-to-pdf.html">
+    <div class="icon textpdf">🧾</div>
+    <div class="text">
+      <h3>Text to PDF</h3>
+      <p>Convert typed text into PDF</p>
+    </div>
+  </a>
+
+  <!-- 2️⃣ IMAGE TO PDF -->
+  <a class="card" href="image-to-pdf.html">
+    <div class="icon img">🖼️</div>
+    <div class="text">
+      <h3>Image to PDF</h3>
+      <p>Convert images into PDF</p>
+    </div>
+  </a>
+
+  <!-- 3️⃣ PDF TO IMAGE -->
+  <a class="card" href="pdf-to-image.html">
+    <div class="icon pdf">📄</div>
+    <div class="text">
+      <h3>PDF to Image</h3>
+      <p>Convert PDF pages to images</p>
+    </div>
+  </a>
+
+  <!-- 4️⃣ MERGE PDF -->
+  <a class="card" href="merge-pdf.html">
+    <div class="icon merge">📎</div>
+    <div class="text">
+      <h3>Merge PDF</h3>
+      <p>Combine multiple PDFs</p>
+    </div>
+  </a>
+
+  <!-- 5️⃣ SPLIT PDF -->
+  <a class="card" href="split-pdf.html">
+    <div class="icon split">✂️</div>
+    <div class="text">
+      <h3>Split PDF</h3>
+      <p>Extract pages easily</p>
+    </div>
+  </a>
+
+  <!-- 6️⃣ ROTATE PDF -->
+  <a class="card" href="rotate-pdf.html">
+    <div class="icon rotate">🔄</div>
+    <div class="text">
+      <h3>Rotate PDF</h3>
+      <p>Rotate pages quickly</p>
+    </div>
+  </a>
+
+  <!-- 7️⃣ WATERMARK -->
+  <a class="card" href="watermark-pdf.html">
+    <div class="icon watermark">📝</div>
+    <div class="text">
+      <h3>Add Watermark</h3>
+      <p>Add watermark to PDF</p>
+    </div>
+  </a>
+
+</div>
+
+<!-- ABOUT -->
+<div class="about">
+  <h3>About Us</h3>
+  <p>This website provides free browser-based PDF tools. Fast ⚡ Secure 🔒 No Upload Required.</p>
+</div>
+
+<script>
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+function searchTool() {
+  let input = document.getElementById("search").value.toLowerCase();
+  let cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    let text = card.innerText.toLowerCase();
+    card.style.display = text.includes(input) ? "flex" : "none";
+  });
+}
+</script>
+
+</body>
+</html>

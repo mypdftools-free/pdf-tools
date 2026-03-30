@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Split PDF</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f9;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 450px;
+      margin: auto;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .drop-area {
+      border: 2px dashed #007bff;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .drop-area:hover {
+      background: #f0f8ff;
+    }
+
+    input[type="number"] {
+      padding: 8px;
+      margin: 5px;
+      width: 40%;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .file-name {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .mode {
+      margin-top: 10px;
+    }
+
+    .loader {
+      display: none;
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>✂️ Split PDF</h2>
+
+  <div class="drop-area" id="dropArea">
+    Drag & Drop PDF or Click to Upload
+  </div>
+
+  <input type="file" id="fileInput" accept="application/pdf" hidden>
+
+  <div class="file-name" id="fileName"></div>
+
+  <!-- MODE SELECTION -->
+  <div class="mode">
+    <label>
+      <input type="radio" name="mode" value="single" checked>
+      Single Page
+    </label>
+
+    <label>
+      <input type="radio" name="mode" value="range">
+      Page Range
+    </label>
+  </div>
+
+  <!-- SINGLE -->
+  <div id="singleInput">
+    <input type="number" id="singlePage" placeholder="Enter page number">
+  </div>
+
+  <!-- RANGE -->
+  <div id="rangeInput" style="display:none;">
+    <input type="number" id="startPage" placeholder="Start">
+    <input type="number" id="endPage" placeholder="End">
+  </div>
+
+  <div class="hint">Pages start from 1</div>
+
+  <button onclick="splitPDF()">Split PDF</button>
+
+  <div class="loader" id="loader">Processing...</div>
+</div>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<script>
+let file = null;
+
+// Upload click
+document.getElementById("dropArea").onclick = () => {
+  document.getElementById("fileInput").click();
+};
+
+// File select
+document.getElementById("fileInput").addEventListener("change", e => {
+  file = e.target.files[0];
+  document.getElementById("fileName").innerText = file.name;
+});
+
+// Drag & drop
+let dropArea = document.getElementById("dropArea");
+
+dropArea.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropArea.style.background = "#e0f0ff";
+});
+
+dropArea.addEventListener("dragleave", () => {
+  dropArea.style.background = "";
+});
+
+dropArea.addEventListener("drop", e => {
+  e.preventDefault();
+  dropArea.style.background = "";
+  file = e.dataTransfer.files[0];
+  document.getElementById("fileName").innerText = file.name;
+});
+
+// Mode switch
+document.querySelectorAll('input[name="mode"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    let mode = document.querySelector('input[name="mode"]:checked').value;
+
+    document.getElementById("singleInput").style.display =
+      mode === "single" ? "block" : "none";
+
+    document.getElementById("rangeInput").style.display =
+      mode === "range" ? "block" : "none";
+  });
+});
+
+// Split logic
+async function splitPDF() {
+  const { PDFDocument } = PDFLib;
+
+  if (!file) {
+    alert("Please upload a PDF");
+    return;
+  }
+
+  let mode = document.querySelector('input[name="mode"]:checked').value;
+  let pages = [];
+
+  if (mode === "single") {
+    let p = parseInt(document.getElementById("singlePage").value) - 1;
+
+    if (isNaN(p) || p < 0) {
+      alert("Enter valid page number");
+      return;
+    }
+
+    pages.push(p);
+  }
+
+  if (mode === "range") {
+    let start = parseInt(document.getElementById("startPage").value) - 1;
+    let end = parseInt(document.getElementById("endPage").value) - 1;
+
+    if (isNaN(start) || isNaN(end) || start < 0 || end < start) {
+      alert("Enter valid page range");
+      return;
+    }
+
+    for (let i = start; i <= end; i++) pages.push(i);
+  }
+
+  document.getElementById("loader").style.display = "block";
+
+  try {
+    const bytes = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(bytes);
+    const newPdf = await PDFDocument.create();
+
+    const copiedPages = await newPdf.copyPages(pdf, pages);
+    copiedPages.forEach(p => newPdf.addPage(p));
+
+    const finalPdf = await newPdf.save();
+
+    download(finalPdf, "split.pdf");
+  } catch (e) {
+    alert("Error processing PDF");
+  }
+
+  document.getElementById("loader").style.display = "none";
+}
+
+// Download
+function download(data, name) {
+  const blob = new Blob([data], { type: "application/pdf" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = name;
+  link.click();
+}
+</script>
+
+</body>
+</html>

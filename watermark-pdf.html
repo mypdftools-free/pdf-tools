@@ -1,0 +1,230 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Watermark</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f9;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 480px;
+      margin: auto;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .drop-area {
+      border: 2px dashed #007bff;
+      padding: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .drop-area:hover {
+      background: #eef6ff;
+    }
+
+    input, select {
+      width: 85%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px;
+      width: 90%;
+      border: none;
+      border-radius: 6px;
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .file-name {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #333;
+    }
+
+    .preview {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .loader {
+      display: none;
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>📝 Add Watermark</h2>
+
+  <div class="drop-area" id="dropArea">
+    Drag & Drop PDF or Click to Upload
+  </div>
+
+  <input type="file" id="fileInput" accept="application/pdf" hidden>
+
+  <div class="file-name" id="fileName"></div>
+
+  <!-- TEXT -->
+  <input type="text" id="text" placeholder="Enter watermark text">
+
+  <!-- POSITION -->
+  <select id="position">
+    <option value="center">Center</option>
+    <option value="top">Top</option>
+    <option value="bottom">Bottom</option>
+  </select>
+
+  <!-- SIZE -->
+  <input type="number" id="size" placeholder="Font size (default 20)">
+
+  <!-- OPACITY -->
+  <input type="number" id="opacity" placeholder="Opacity (0.1 to 1)" step="0.1">
+
+  <div class="preview" id="previewText"></div>
+
+  <button onclick="addWatermark()">Apply Watermark</button>
+
+  <div class="loader" id="loader">Processing PDF...</div>
+
+</div>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<script>
+let file = null;
+
+// Click upload
+document.getElementById("dropArea").onclick = () => {
+  document.getElementById("fileInput").click();
+};
+
+// File select
+document.getElementById("fileInput").addEventListener("change", e => {
+  file = e.target.files[0];
+  document.getElementById("fileName").innerText = file.name;
+});
+
+// Drag & drop
+let dropArea = document.getElementById("dropArea");
+
+dropArea.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropArea.style.background = "#e0f0ff";
+});
+
+dropArea.addEventListener("dragleave", () => {
+  dropArea.style.background = "";
+});
+
+dropArea.addEventListener("drop", e => {
+  e.preventDefault();
+  dropArea.style.background = "";
+  file = e.dataTransfer.files[0];
+  document.getElementById("fileName").innerText = file.name;
+});
+
+// Live preview text
+document.getElementById("text").addEventListener("input", e => {
+  document.getElementById("previewText").innerText = "Preview: " + e.target.value;
+});
+
+// Add watermark
+async function addWatermark() {
+  const { PDFDocument, rgb } = PDFLib;
+
+  if (!file) {
+    alert("Upload a PDF first");
+    return;
+  }
+
+  let text = document.getElementById("text").value;
+  if (!text) {
+    alert("Enter watermark text");
+    return;
+  }
+
+  let position = document.getElementById("position").value;
+  let size = parseInt(document.getElementById("size").value) || 20;
+  let opacity = parseFloat(document.getElementById("opacity").value) || 0.3;
+
+  document.getElementById("loader").style.display = "block";
+
+  try {
+    const bytes = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(bytes);
+
+    pdf.getPages().forEach(page => {
+      let { width, height } = page.getSize();
+
+      let x = width / 2 - 50;
+      let y = height / 2;
+
+      if (position === "top") y = height - 50;
+      if (position === "bottom") y = 50;
+
+      page.drawText(text, {
+        x: x,
+        y: y,
+        size: size,
+        color: rgb(0.6, 0.6, 0.6),
+        opacity: opacity
+      });
+    });
+
+    const finalPdf = await pdf.save();
+
+    download(finalPdf, "watermarked.pdf");
+
+  } catch (e) {
+    alert("Error processing PDF");
+  }
+
+  document.getElementById("loader").style.display = "none";
+}
+
+// Download
+function download(data, name) {
+  let blob = new Blob([data], { type: "application/pdf" });
+  let link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = name;
+  link.click();
+}
+</script>
+
+</body>
+</html>

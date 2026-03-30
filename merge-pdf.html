@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Merge PDF</title>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, Arial;
+  background: #f2f4f7;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #007bff;
+  color: white;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+  padding: 16px;
+}
+
+/* CARD */
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* DROP AREA */
+.drop-area {
+  border: 2px dashed #007bff;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* FILE LIST */
+.file-list {
+  margin-top: 10px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #007bff;
+  color: white;
+  font-size: 15px;
+}
+
+/* SMALL BUTTONS */
+.small-btn {
+  margin-left: 5px;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+/* LOADER */
+.loader {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+  color: green;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">📎 Merge PDF</div>
+
+<div class="container">
+<div class="card">
+
+<div class="drop-area" onclick="fileInput.click()">
+  Click or Drag PDFs
+</div>
+
+<input type="file" id="fileInput" multiple accept="application/pdf" hidden>
+
+<div class="file-list" id="fileList"></div>
+
+<button onclick="mergePDF()">Merge PDF</button>
+
+<div class="loader" id="loader">Processing...</div>
+
+</div>
+</div>
+
+<script>
+let files = [];
+
+// FILE SELECT
+fileInput.onchange = e => {
+  files = Array.from(e.target.files);
+  showFiles();
+};
+
+// SHOW FILES
+function showFiles() {
+  fileList.innerHTML = "";
+
+  files.forEach((file, i) => {
+    let div = document.createElement("div");
+    div.className = "file-item";
+
+    let name = document.createElement("span");
+    name.innerText = file.name;
+
+    let controls = document.createElement("div");
+
+    let del = document.createElement("button");
+    del.innerText = "❌";
+    del.className = "small-btn";
+    del.onclick = () => {
+      files.splice(i, 1);
+      showFiles();
+    };
+
+    let left = document.createElement("button");
+    left.innerText = "⬅️";
+    left.className = "small-btn";
+    left.onclick = () => {
+      if (i > 0) {
+        [files[i], files[i - 1]] = [files[i - 1], files[i]];
+        showFiles();
+      }
+    };
+
+    let right = document.createElement("button");
+    right.innerText = "➡️";
+    right.className = "small-btn";
+    right.onclick = () => {
+      if (i < files.length - 1) {
+        [files[i], files[i + 1]] = [files[i + 1], files[i]];
+        showFiles();
+      }
+    };
+
+    controls.appendChild(left);
+    controls.appendChild(right);
+    controls.appendChild(del);
+
+    div.appendChild(name);
+    div.appendChild(controls);
+
+    fileList.appendChild(div);
+  });
+}
+
+// MERGE PDF
+async function mergePDF() {
+  const { PDFDocument } = PDFLib;
+
+  if (files.length < 2) {
+    alert("Select at least 2 PDFs");
+    return;
+  }
+
+  loader.style.display = "block";
+
+  const mergedPdf = await PDFDocument.create();
+
+  for (let file of files) {
+    const bytes = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(bytes);
+
+    const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+    pages.forEach(p => mergedPdf.addPage(p));
+  }
+
+  const finalPdf = await mergedPdf.save();
+
+  loader.style.display = "none";
+
+  download(finalPdf, "merged.pdf");
+}
+
+// DOWNLOAD
+function download(data, name) {
+  const blob = new Blob([data], { type: "application/pdf" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = name;
+  link.click();
+}
+</script>
+
+</body>
+</html>
