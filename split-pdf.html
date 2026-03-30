@@ -1,168 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Split PDF</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f6f9;
-      text-align: center;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      max-width: 450px;
-      margin: auto;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
+<!-- SEO -->
+<title>Split PDF Online Free | My PDF Tools</title>
+<meta name="description" content="Split PDF pages online for free. Extract single page or page range. No upload required. Fast and secure.">
 
-    h2 {
-      margin-bottom: 10px;
-    }
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCYXFHG3BJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-NCYXFHG3BJ');
+</script>
 
-    .drop-area {
-      border: 2px dashed #007bff;
-      padding: 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      color: #555;
-    }
+<!-- PDF LIB -->
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
-    .drop-area:hover {
-      background: #f0f8ff;
-    }
+<style>
+* { box-sizing: border-box; }
 
-    input[type="number"] {
-      padding: 8px;
-      margin: 5px;
-      width: 40%;
-    }
+body {
+  margin: 0;
+  font-family: -apple-system, Arial;
+  background: #f2f4f7;
+}
 
-    button {
-      margin-top: 10px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
+/* NAVBAR */
+.navbar {
+  background: #007bff;
+  color: white;
+  padding: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-    button:hover {
-      background: #0056b3;
-    }
+/* CONTAINER */
+.container {
+  padding: 16px;
+}
 
-    .file-name {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #333;
-    }
+/* CARD */
+.card {
+  background: white;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 500px;
+  margin: auto;
+}
 
-    .mode {
-      margin-top: 10px;
-    }
+/* DROP AREA */
+.drop-area {
+  border: 2px dashed #007bff;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  background: #fafafa;
+}
 
-    .loader {
-      display: none;
-      color: green;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+.drop-area:hover {
+  background: #eef5ff;
+}
 
-    .hint {
-      font-size: 12px;
-      color: gray;
-    }
-  </style>
+/* INPUTS */
+input[type="number"] {
+  padding: 10px;
+  margin: 6px;
+  width: 45%;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #007bff;
+  color: white;
+  font-size: 15px;
+}
+
+/* FILE NAME */
+.file-name {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* MODE */
+.mode {
+  margin-top: 12px;
+  text-align: center;
+}
+
+/* LOADER */
+.loader {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+  color: green;
+}
+
+/* HINT */
+.hint {
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
+}
+</style>
+
 </head>
 
 <body>
 
+<h1 style="display:none;">Split PDF Online Free</h1>
+
+<div class="navbar">Split PDF</div>
+
 <div class="container">
-  <h2>✂️ Split PDF</h2>
+<div class="card">
 
-  <div class="drop-area" id="dropArea">
-    Drag & Drop PDF or Click to Upload
-  </div>
-
-  <input type="file" id="fileInput" accept="application/pdf" hidden>
-
-  <div class="file-name" id="fileName"></div>
-
-  <!-- MODE SELECTION -->
-  <div class="mode">
-    <label>
-      <input type="radio" name="mode" value="single" checked>
-      Single Page
-    </label>
-
-    <label>
-      <input type="radio" name="mode" value="range">
-      Page Range
-    </label>
-  </div>
-
-  <!-- SINGLE -->
-  <div id="singleInput">
-    <input type="number" id="singlePage" placeholder="Enter page number">
-  </div>
-
-  <!-- RANGE -->
-  <div id="rangeInput" style="display:none;">
-    <input type="number" id="startPage" placeholder="Start">
-    <input type="number" id="endPage" placeholder="End">
-  </div>
-
-  <div class="hint">Pages start from 1</div>
-
-  <button onclick="splitPDF()">Split PDF</button>
-
-  <div class="loader" id="loader">Processing...</div>
+<div class="drop-area" id="dropArea">
+  Click or Drag PDF File
 </div>
 
-<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<input type="file" id="fileInput" accept="application/pdf" hidden>
+
+<div class="file-name" id="fileName"></div>
+
+<!-- MODE -->
+<div class="mode">
+  <label>
+    <input type="radio" name="mode" value="single" checked>
+    Single Page
+  </label>
+
+  <label>
+    <input type="radio" name="mode" value="range">
+    Page Range
+  </label>
+</div>
+
+<!-- SINGLE -->
+<div id="singleInput">
+  <input type="number" id="singlePage" placeholder="Page number">
+</div>
+
+<!-- RANGE -->
+<div id="rangeInput" style="display:none;">
+  <input type="number" id="startPage" placeholder="Start">
+  <input type="number" id="endPage" placeholder="End">
+</div>
+
+<div class="hint">Pages start from 1</div>
+
+<button onclick="splitPDF()">Split PDF</button>
+
+<div class="loader" id="loader">Processing...</div>
+
+</div>
+</div>
 
 <script>
 let file = null;
 
-// Upload click
-document.getElementById("dropArea").onclick = () => {
-  document.getElementById("fileInput").click();
-};
+const dropArea = document.getElementById("dropArea");
+const fileInput = document.getElementById("fileInput");
 
-// File select
-document.getElementById("fileInput").addEventListener("change", e => {
-  file = e.target.files[0];
-  document.getElementById("fileName").innerText = file.name;
-});
+// CLICK
+dropArea.onclick = () => fileInput.click();
 
-// Drag & drop
-let dropArea = document.getElementById("dropArea");
-
+// DRAG DROP
 dropArea.addEventListener("dragover", e => {
   e.preventDefault();
-  dropArea.style.background = "#e0f0ff";
+  dropArea.style.background = "#eef5ff";
 });
 
 dropArea.addEventListener("dragleave", () => {
-  dropArea.style.background = "";
+  dropArea.style.background = "#fafafa";
 });
 
 dropArea.addEventListener("drop", e => {
   e.preventDefault();
-  dropArea.style.background = "";
   file = e.dataTransfer.files[0];
   document.getElementById("fileName").innerText = file.name;
 });
 
-// Mode switch
+// FILE SELECT
+fileInput.addEventListener("change", e => {
+  file = e.target.files[0];
+  document.getElementById("fileName").innerText = file.name;
+});
+
+// MODE SWITCH
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
   radio.addEventListener("change", () => {
     let mode = document.querySelector('input[name="mode"]:checked').value;
@@ -175,12 +215,12 @@ document.querySelectorAll('input[name="mode"]').forEach(radio => {
   });
 });
 
-// Split logic
+// SPLIT
 async function splitPDF() {
   const { PDFDocument } = PDFLib;
 
   if (!file) {
-    alert("Please upload a PDF");
+    alert("Upload PDF");
     return;
   }
 
@@ -191,7 +231,7 @@ async function splitPDF() {
     let p = parseInt(document.getElementById("singlePage").value) - 1;
 
     if (isNaN(p) || p < 0) {
-      alert("Enter valid page number");
+      alert("Enter valid page");
       return;
     }
 
@@ -203,14 +243,14 @@ async function splitPDF() {
     let end = parseInt(document.getElementById("endPage").value) - 1;
 
     if (isNaN(start) || isNaN(end) || start < 0 || end < start) {
-      alert("Enter valid page range");
+      alert("Enter valid range");
       return;
     }
 
     for (let i = start; i <= end; i++) pages.push(i);
   }
 
-  document.getElementById("loader").style.display = "block";
+  loader.style.display = "block";
 
   try {
     const bytes = await file.arrayBuffer();
@@ -227,10 +267,10 @@ async function splitPDF() {
     alert("Error processing PDF");
   }
 
-  document.getElementById("loader").style.display = "none";
+  loader.style.display = "none";
 }
 
-// Download
+// DOWNLOAD
 function download(data, name) {
   const blob = new Blob([data], { type: "application/pdf" });
   const link = document.createElement("a");

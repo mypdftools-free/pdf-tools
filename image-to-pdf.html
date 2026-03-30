@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -8,7 +9,16 @@
 <title>Image to PDF Online Free | My PDF Tools</title>
 <meta name="description" content="Convert images to PDF online for free. No upload required. Fast and secure tool.">
 
-<!-- LIBRARY -->
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCYXFHG3BJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-NCYXFHG3BJ');
+</script>
+
+<!-- PDF LIB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
@@ -46,11 +56,16 @@ body {
 /* DROP AREA */
 .drop-area {
   border: 2px dashed #007bff;
-  padding: 25px;
+  padding: 30px;
   border-radius: 14px;
   text-align: center;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  background: #fafafa;
+}
+
+.drop-area:hover {
+  background: #eef5ff;
 }
 
 /* PREVIEW */
@@ -87,9 +102,9 @@ button {
 
 /* SMALL BUTTONS */
 .small-btn {
-  padding: 5px;
-  font-size: 12px;
-  margin-top: 5px;
+  padding: 4px;
+  font-size: 11px;
+  margin-top: 4px;
 }
 
 /* SELECT */
@@ -107,31 +122,29 @@ select {
   color: green;
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- SEO H1 (hidden for Google) -->
 <h1 style="display:none;">Image to PDF Online Free</h1>
 
-<div class="navbar">🖼️ Image to PDF</div>
+<div class="navbar">Image to PDF</div>
 
 <div class="container">
 <div class="card">
 
-<div class="drop-area" onclick="fileInput.click()">
-  Click or Drag Images
+<div class="drop-area" id="drop">
+  Click or Drag Images Here
 </div>
 
 <input type="file" id="fileInput" multiple accept="image/*" hidden>
 
-<!-- PAGE SIZE -->
 <select id="pageSize">
-  <option value="a4">A4 Size</option>
+  <option value="a4">A4 Size (Fit)</option>
   <option value="auto">Original Size</option>
 </select>
 
-<!-- PREVIEW -->
 <div class="preview" id="preview"></div>
 
 <button onclick="convert()">Convert to PDF</button>
@@ -144,13 +157,35 @@ select {
 <script>
 let files = [];
 
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("fileInput");
+
+// CLICK
+drop.onclick = () => fileInput.click();
+
+// DRAG DROP
+drop.ondragover = e => {
+  e.preventDefault();
+  drop.style.background = "#eef5ff";
+};
+
+drop.ondragleave = () => {
+  drop.style.background = "#fafafa";
+};
+
+drop.ondrop = e => {
+  e.preventDefault();
+  files = Array.from(e.dataTransfer.files);
+  showPreview();
+};
+
 // FILE SELECT
 fileInput.onchange = e => {
   files = Array.from(e.target.files);
   showPreview();
 };
 
-// SHOW PREVIEW
+// PREVIEW
 function showPreview() {
   preview.innerHTML = "";
 
@@ -169,30 +204,8 @@ function showPreview() {
       showPreview();
     };
 
-    let left = document.createElement("button");
-    left.innerText = "⬅️";
-    left.className = "small-btn";
-    left.onclick = () => {
-      if(i>0){
-        [files[i],files[i-1]]=[files[i-1],files[i]];
-        showPreview();
-      }
-    };
-
-    let right = document.createElement("button");
-    right.innerText = "➡️";
-    right.className = "small-btn";
-    right.onclick = () => {
-      if(i<files.length-1){
-        [files[i],files[i+1]]=[files[i+1],files[i]];
-        showPreview();
-      }
-    };
-
     div.appendChild(img);
     div.appendChild(del);
-    div.appendChild(left);
-    div.appendChild(right);
 
     preview.appendChild(div);
   });
@@ -202,17 +215,17 @@ function showPreview() {
 async function convert() {
   const { jsPDF } = window.jspdf;
 
-  if(files.length===0){
+  if(files.length === 0){
     alert("Select images");
     return;
   }
 
-  loader.style.display="block";
+  loader.style.display = "block";
 
   let pdf = new jsPDF();
   let mode = document.getElementById("pageSize").value;
 
-  for(let i=0;i<files.length;i++){
+  for(let i = 0; i < files.length; i++){
 
     let imgData = await toBase64(files[i]);
 
@@ -222,7 +235,7 @@ async function convert() {
     await new Promise(resolve=>{
       img.onload = function(){
 
-        if(mode==="auto"){
+        if(mode === "auto"){
           pdf = new jsPDF({
             unit:"px",
             format:[img.width,img.height]
@@ -232,24 +245,24 @@ async function convert() {
         let pageW = pdf.internal.pageSize.getWidth();
         let pageH = pdf.internal.pageSize.getHeight();
 
-        let ratio = Math.min(pageW/img.width,pageH/img.height);
+        let ratio = Math.min(pageW/img.width, pageH/img.height);
 
-        let w = img.width*ratio;
-        let h = img.height*ratio;
+        let w = img.width * ratio;
+        let h = img.height * ratio;
 
-        let x = (pageW-w)/2;
-        let y = (pageH-h)/2;
+        let x = (pageW - w)/2;
+        let y = (pageH - h)/2;
 
-        if(i>0) pdf.addPage();
+        if(i > 0) pdf.addPage();
 
-        pdf.addImage(img,"JPEG",x,y,w,h);
+        pdf.addImage(img, "JPEG", x, y, w, h);
 
         resolve();
       }
     });
   }
 
-  loader.style.display="none";
+  loader.style.display = "none";
 
   pdf.save("images.pdf");
 }
@@ -257,9 +270,9 @@ async function convert() {
 // BASE64
 function toBase64(file){
   return new Promise(res=>{
-    let r=new FileReader();
+    let r = new FileReader();
     r.readAsDataURL(file);
-    r.onload=()=>res(r.result);
+    r.onload = () => res(r.result);
   });
 }
 </script>

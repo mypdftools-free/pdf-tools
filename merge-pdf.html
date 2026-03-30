@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Merge PDF</title>
 
+<!-- SEO -->
+<title>Merge PDF Online Free | My PDF Tools</title>
+<meta name="description" content="Merge multiple PDF files into one online for free. No upload required. Fast and secure PDF merge tool.">
+
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCYXFHG3BJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-NCYXFHG3BJ');
+</script>
+
+<!-- PDF LIB -->
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
 <style>
@@ -42,10 +56,15 @@ body {
 /* DROP AREA */
 .drop-area {
   border: 2px dashed #007bff;
-  padding: 25px;
+  padding: 30px;
   border-radius: 14px;
   text-align: center;
   cursor: pointer;
+  background: #fafafa;
+}
+
+.drop-area:hover {
+  background: #eef5ff;
 }
 
 /* FILE LIST */
@@ -91,17 +110,20 @@ button {
   color: green;
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="navbar">📎 Merge PDF</div>
+<h1 style="display:none;">Merge PDF Online Free</h1>
+
+<div class="navbar">Merge PDF</div>
 
 <div class="container">
 <div class="card">
 
-<div class="drop-area" onclick="fileInput.click()">
-  Click or Drag PDFs
+<div class="drop-area" id="drop">
+  Click or Drag PDF Files
 </div>
 
 <input type="file" id="fileInput" multiple accept="application/pdf" hidden>
@@ -117,6 +139,28 @@ button {
 
 <script>
 let files = [];
+
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("fileInput");
+
+// CLICK
+drop.onclick = () => fileInput.click();
+
+// DRAG DROP
+drop.ondragover = e => {
+  e.preventDefault();
+  drop.style.background = "#eef5ff";
+};
+
+drop.ondragleave = () => {
+  drop.style.background = "#fafafa";
+};
+
+drop.ondrop = e => {
+  e.preventDefault();
+  files = Array.from(e.dataTransfer.files);
+  showFiles();
+};
 
 // FILE SELECT
 fileInput.onchange = e => {

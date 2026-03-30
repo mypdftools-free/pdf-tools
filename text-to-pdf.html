@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Text to PDF</title>
+
+<!-- SEO -->
+<title>Text to PDF Online Free | My PDF Tools</title>
+<meta name="description" content="Convert text to PDF online for free. Type or paste text and download as PDF instantly. No upload required.">
+
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCYXFHG3BJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-NCYXFHG3BJ');
+</script>
 
 <!-- PDF LIB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -52,7 +65,7 @@ input, select, textarea {
 
 /* TEXT AREA */
 textarea {
-  height: 200px;
+  height: 220px;
   resize: none;
 }
 
@@ -67,11 +80,6 @@ button {
   color: white;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0056b3;
 }
 
 /* BACK */
@@ -82,31 +90,22 @@ button:hover {
   color: #007bff;
 }
 
-/* DARK MODE */
-.dark {
-  background: #121212;
-}
-
-.dark .card {
-  background: #1e1e1e;
-  color: white;
-}
-
-.dark input,
-.dark textarea,
-.dark select {
-  background: #1e1e1e;
-  color: white;
-  border: 1px solid #444;
+/* LOADER */
+.loader {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+  color: green;
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="navbar">
-  🧾 Text to PDF
-</div>
+<h1 style="display:none;">Text to PDF Online Free</h1>
+
+<div class="navbar">Text to PDF</div>
 
 <a href="index.html" class="back">← Back</a>
 
@@ -128,6 +127,8 @@ button:hover {
 
     <button onclick="generatePDF()">Convert to PDF</button>
 
+    <div class="loader" id="loader">Generating PDF...</div>
+
   </div>
 </div>
 
@@ -140,21 +141,37 @@ function generatePDF() {
   let content = document.getElementById("content").value;
   let fontSize = parseInt(document.getElementById("fontSize").value);
 
+  if (!content) {
+    alert("Enter text");
+    return;
+  }
+
+  loader.style.display = "block";
+
   let y = 20;
 
-  // Title
+  // TITLE
   if (title) {
     doc.setFontSize(18);
     doc.text(title, 10, y);
     y += 10;
   }
 
-  // Content
+  // CONTENT
   doc.setFontSize(fontSize);
 
   let lines = doc.splitTextToSize(content, 180);
 
-  doc.text(lines, 10, y);
+  lines.forEach(line => {
+    if (y > 280) {
+      doc.addPage();
+      y = 20;
+    }
+    doc.text(line, 10, y);
+    y += fontSize * 0.5;
+  });
+
+  loader.style.display = "none";
 
   doc.save("text-to-pdf.pdf");
 }

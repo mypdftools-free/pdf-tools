@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PDF to Image</title>
 
+<!-- SEO -->
+<title>PDF to Image Online Free | My PDF Tools</title>
+<meta name="description" content="Convert PDF to images online for free. Extract all pages as images. No upload required. Fast and secure.">
+
+<!-- GOOGLE ANALYTICS -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCYXFHG3BJ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-NCYXFHG3BJ');
+</script>
+
+<!-- PDF JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 <style>
@@ -46,6 +60,11 @@ body {
   border-radius: 14px;
   text-align: center;
   cursor: pointer;
+  background: #fafafa;
+}
+
+.drop-area:hover {
+  background: #eef5ff;
 }
 
 /* FILE INFO */
@@ -81,17 +100,20 @@ button {
   color: green;
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="navbar">📄 PDF to Image</div>
+<h1 style="display:none;">PDF to Image Online Free</h1>
+
+<div class="navbar">PDF to Image</div>
 
 <div class="container">
 <div class="card">
 
-<div class="drop-area" onclick="fileInput.click()">
-  Click or Drag PDF
+<div class="drop-area" id="drop">
+  Click or Drag PDF File
 </div>
 
 <input type="file" id="fileInput" accept="application/pdf" hidden>
@@ -113,6 +135,28 @@ button {
 let pdfFile = null;
 let images = [];
 
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("fileInput");
+
+// CLICK
+drop.onclick = () => fileInput.click();
+
+// DRAG DROP
+drop.ondragover = e => {
+  e.preventDefault();
+  drop.style.background = "#eef5ff";
+};
+
+drop.ondragleave = () => {
+  drop.style.background = "#fafafa";
+};
+
+drop.ondrop = e => {
+  e.preventDefault();
+  pdfFile = e.dataTransfer.files[0];
+  fileInfo.innerText = pdfFile.name;
+};
+
 // FILE SELECT
 fileInput.onchange = e => {
   pdfFile = e.target.files[0];
@@ -132,7 +176,7 @@ async function convert() {
 
   let pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
 
-  fileInfo.innerText += " | Pages: " + pdf.numPages;
+  fileInfo.innerText = pdfFile.name + " | Pages: " + pdf.numPages;
 
   for (let i = 1; i <= pdf.numPages; i++) {
     let page = await pdf.getPage(i);
@@ -171,7 +215,7 @@ function downloadImage(data, page) {
   link.click();
 }
 
-// DOWNLOAD ALL (ZIP SIMULATION)
+// DOWNLOAD ALL
 function downloadAll() {
   if (images.length === 0) {
     alert("Convert first");
