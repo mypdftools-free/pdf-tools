@@ -1,150 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
-<title>Contact Us | My PDF Tools</title>
-<meta name="description" content="Contact My PDF Tools for support, feedback or suggestions.">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
-</script>
+<title>Contact | My PDF Tools</title>
 
 <style>
-body {
-  font-family: -apple-system, Arial;
-  margin: 0;
-  background: #f4f6f9;
-  color: #333;
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* BACK */
-.back {
-  display: block;
-  margin: 15px;
-  text-decoration: none;
-  color: #007bff;
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#e53935;
 }
 
 /* CONTAINER */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+.container{
+padding:20px 16px;
+max-width:900px;
+margin:auto;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+/* TEXT */
+h1{
+font-size:26px;
+margin-bottom:10px;
 }
 
-/* INPUTS */
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  font-size: 14px;
+p{
+color:#666;
+margin-bottom:20px;
+line-height:1.6;
 }
 
-textarea {
-  height: 120px;
-  resize: none;
+/* FORM */
+input, textarea{
+width:100%;
+padding:16px;
+margin-bottom:14px;
+border-radius:14px;
+border:1px solid #ddd;
+font-size:15px;
+outline:none;
+}
+
+textarea{
+min-height:120px;
+resize:none;
 }
 
 /* BUTTON */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 12px;
-  background: #007bff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+background:#e53935;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* SUCCESS MESSAGE */
+.success{
+display:none;
+background:#fbe9e7;
+color:#d84315;
+padding:18px;
+border-radius:14px;
+text-align:center;
+margin-top:20px;
+font-size:15px;
 }
 
 /* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
+}
+
+.footer a{
+margin:0 6px;
+color:#007bff;
+text-decoration:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1 style="display:none;">Contact My PDF Tools</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">My PDF Tools</div>
+</div>
 
-<div class="navbar">Contact Us</div>
-
-<a href="index.html" class="back">← Back to Home</a>
-
+<!-- CONTENT -->
 <div class="container">
-<div class="card">
 
 <h1>Contact Us</h1>
 
-<p>If you have any questions, feedback, or suggestions, feel free to contact us.</p>
+<p>Have questions or feedback? We'd love to hear from you.</p>
 
-<h2>Email</h2>
-<p><strong>sksaidulu1008@gmail.com</strong></p>
+<form id="contactForm">
 
-<h2>Send Message</h2>
+<input type="text" placeholder="Your Name" required>
+<input type="email" placeholder="Your Email" required>
+<textarea placeholder="Your Message" required></textarea>
 
-<form onsubmit="sendMail(event)">
-  <input type="text" id="name" placeholder="Your Name" required>
-  <input type="email" id="email" placeholder="Your Email" required>
-  <textarea id="message" placeholder="Your Message" required></textarea>
+<button type="submit">Send Message</button>
 
-  <button type="submit">Send Message</button>
 </form>
 
-</div>
+<!-- SUCCESS MESSAGE -->
+<div class="success" id="successMsg">
+Thank you for your message! We'll get back to you soon.
 </div>
 
-<footer>
-© 2026 My PDF Tools • All Rights Reserved
-</footer>
+</div>
 
+<!-- FOOTER -->
+<div class="footer">
+© 2026 My PDF Tools. All processing is done in your browser.
+<br><br>
+<a href="privacy.html">Privacy Policy</a> |
+<a href="about.html">About Us</a> |
+<a href="contact.html">Contact</a>
+</div>
+
+<!-- SCRIPT -->
 <script>
-function sendMail(e) {
-  e.preventDefault();
+document.getElementById("contactForm").addEventListener("submit", function(e){
+e.preventDefault();
 
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let message = document.getElementById("message").value;
+// hide form
+this.style.display = "none";
 
-  let mailto = `mailto:sksaidulu1008@gmail.com?subject=Message from ${name}&body=${message} (Email: ${email})`;
-
-  window.location.href = mailto;
-}
+// show success message
+document.getElementById("successMsg").style.display = "block";
+});
 </script>
 
 </body>

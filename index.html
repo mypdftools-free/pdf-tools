@@ -1,249 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
 <title>Free PDF Tools Online | My PDF Tools</title>
 <meta name="description" content="Free online PDF tools. Merge, split, convert PDF, image to PDF, watermark and more. No upload required. Fast & secure.">
 
-<!-- Google tag (gtag.js) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-4F4E51SPE0');
 </script>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Arial;
-  background: #f2f4f7;
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#e53935;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.menu-btn{
+font-size:22px;
+cursor:pointer;
+}
+
+/* MENU */
+.menu{
+display:none;
+background:white;
+padding:15px;
+border-bottom:1px solid #eee;
+}
+
+.menu.active{
+display:block;
+}
+
+.menu a{
+display:block;
+padding:12px 0;
+font-size:18px;
+text-decoration:none;
+color:#333;
+}
+
+/* HERO */
+.hero{
+text-align:center;
+padding:25px 16px;
+}
+
+.hero h1{
+font-size:24px;
+margin-bottom:10px;
+}
+
+.hero p{
+color:#666;
+font-size:14px;
 }
 
 /* SEARCH */
-.search {
-  padding: 16px;
+.search{
+padding:0 16px;
+margin-bottom:20px;
 }
 
-.search input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  font-size: 15px;
+.search input{
+width:100%;
+padding:14px;
+border-radius:20px;
+border:none;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* CONTAINER */
-.container {
-  padding: 0 16px 30px;
+/* CARDS */
+.container{
+padding:0 16px 30px;
 }
 
-/* CARD */
-.card {
-  display: flex;
-  align-items: center;
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  margin-bottom: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  text-decoration: none;
-  color: black;
-  transition: 0.2s;
+.card{
+background:white;
+padding:18px;
+border-radius:20px;
+margin-bottom:16px;
+box-shadow:0 8px 20px rgba(0,0,0,0.06);
+display:flex;
+align-items:center;
+text-decoration:none;
+color:black;
 }
 
-.card:active {
-  transform: scale(0.98);
-}
-
-/* ICON */
-.icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-  font-size: 24px;
-  color: white;
-  flex-shrink: 0;
+.icon{
+width:50px;
+height:50px;
+border-radius:14px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin-right:14px;
 }
 
 /* COLORS */
-.textpdf { background: #795548; }
-.img { background: #ff9800; }
-.pdf { background: #2196f3; }
-.merge { background: #4caf50; }
-.split { background: #f44336; }
-.rotate { background: #9c27b0; }
-.watermark { background: #607d8b; }
+.img{background:#ffe0db;}
+.pdf{background:#d9f0f5;}
+.merge{background:#e3f2fd;}
+.split{background:#e8f5e9;}
+.rotate{background:#f3e5f5;}
+.water{background:#fff3e0;}
+.text{background:#fce4ec;}
+
+.icon svg{
+width:24px;
+height:24px;
+stroke-width:2;
+}
 
 /* TEXT */
-.text h3 {
-  margin: 0;
-  font-size: 16px;
+.title{
+font-size:16px;
+font-weight:600;
 }
 
-.text p {
-  margin: 4px 0 0;
-  font-size: 13px;
-  color: #666;
-}
-
-/* ABOUT */
-.about {
-  padding: 20px;
-  text-align: center;
-  color: #555;
+.desc{
+font-size:13px;
+color:#777;
 }
 
 /* FOOTER */
-.footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
 }
 
-.footer a {
-  text-decoration: none;
-  color: #007bff;
-  margin: 0 6px;
-}
-
-/* DARK MODE */
-.dark {
-  background: #121212;
-}
-
-.dark .card {
-  background: #1e1e1e;
-  color: white;
-}
-
-.dark input {
-  background: #1e1e1e;
-  color: white;
+.footer a{
+margin:0 6px;
+color:#007bff;
+text-decoration:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<!-- H1 SEO -->
-<h1 style="display:none;">Free PDF Tools Online</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <!-- LOGO ICON -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e53935">
+      <path d="M6 2h9l5 5v15H6z"/>
+    </svg>
+    My PDF Tools
+  </div>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</div>
 
-<!-- NAVBAR -->
-<div class="navbar">
-  My PDF Tools
+<!-- MENU -->
+<div id="menu" class="menu">
+  <a href="index.html">Tools</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Every tool you need to work with PDFs</h1>
+  <p>100% free, fully private. All processing happens in your browser — your files never leave your device.</p>
 </div>
 
 <!-- SEARCH -->
 <div class="search">
-  <input type="text" id="search" placeholder="Search tools..." onkeyup="searchTool()">
+  <input type="text" placeholder="Search tools..." id="search" onkeyup="searchTool()">
 </div>
 
 <!-- TOOLS -->
 <div class="container" id="tools">
 
-  <a class="card" href="text-to-pdf.html">
-    <div class="icon textpdf">🧾</div>
-    <div class="text">
-      <h3>Text to PDF</h3>
-      <p>Convert typed text into PDF</p>
-    </div>
-  </a>
+<!-- Image to PDF -->
+<a class="card" href="image-to-pdf.html">
+  <div class="icon img">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#e53935">
+      <rect x="3" y="3" width="18" height="18" rx="3"/>
+      <circle cx="8" cy="8" r="2"/>
+      <path d="M21 15l-5-5L5 21"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Image to PDF</div>
+    <div class="desc">Convert JPG, PNG images to PDF</div>
+  </div>
+</a>
 
-  <a class="card" href="image-to-pdf.html">
-    <div class="icon img">🖼️</div>
-    <div class="text">
-      <h3>Image to PDF</h3>
-      <p>Convert images into PDF</p>
-    </div>
-  </a>
+<!-- PDF to Image -->
+<a class="card" href="pdf-to-image.html">
+  <div class="icon pdf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#039be5">
+      <path d="M6 2h9l5 5v15H6z"/>
+      <path d="M12 18v-6"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">PDF to Image</div>
+    <div class="desc">Convert PDF pages to JPG images</div>
+  </div>
+</a>
 
-  <a class="card" href="pdf-to-image.html">
-    <div class="icon pdf">📄</div>
-    <div class="text">
-      <h3>PDF to Image</h3>
-      <p>Convert PDF pages to images</p>
-    </div>
-  </a>
+<!-- Merge -->
+<a class="card" href="merge-pdf.html">
+  <div class="icon merge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#1976d2">
+      <path d="M7 7h10v10H7z"/>
+      <path d="M3 3h10v10H3z"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Merge PDF</div>
+    <div class="desc">Combine multiple PDFs into one</div>
+  </div>
+</a>
 
-  <a class="card" href="merge-pdf.html">
-    <div class="icon merge">📎</div>
-    <div class="text">
-      <h3>Merge PDF</h3>
-      <p>Combine multiple PDFs</p>
-    </div>
-  </a>
+<!-- Split -->
+<a class="card" href="split-pdf.html">
+  <div class="icon split">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#2e7d32">
+      <path d="M4 4l16 16"/>
+      <path d="M4 20L20 4"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Split PDF</div>
+    <div class="desc">Extract pages from a PDF file</div>
+  </div>
+</a>
 
-  <a class="card" href="split-pdf.html">
-    <div class="icon split">✂️</div>
-    <div class="text">
-      <h3>Split PDF</h3>
-      <p>Extract pages easily</p>
-    </div>
-  </a>
+<!-- Rotate -->
+<a class="card" href="rotate-pdf.html">
+  <div class="icon rotate">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#8e24aa">
+      <path d="M4 4v6h6"/>
+      <path d="M20 20v-6h-6"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Rotate PDF</div>
+    <div class="desc">Rotate PDF pages to any angle</div>
+  </div>
+</a>
 
-  <a class="card" href="rotate-pdf.html">
-    <div class="icon rotate">🔄</div>
-    <div class="text">
-      <h3>Rotate PDF</h3>
-      <p>Rotate pages quickly</p>
-    </div>
-  </a>
+<!-- Watermark -->
+<a class="card" href="watermark-pdf.html">
+  <div class="icon water">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#ef6c00">
+      <path d="M12 2C8 8 6 11 6 14a6 6 0 0012 0c0-3-2-6-6-12z"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Add Watermark</div>
+    <div class="desc">Add text watermark to PDF pages</div>
+  </div>
+</a>
 
-  <a class="card" href="watermark-pdf.html">
-    <div class="icon watermark">📝</div>
-    <div class="text">
-      <h3>Add Watermark</h3>
-      <p>Add watermark to PDF</p>
-    </div>
-  </a>
+<!-- Text -->
+<a class="card" href="text-to-pdf.html">
+  <div class="icon text">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#c2185b">
+      <path d="M4 4h16M12 4v16"/>
+    </svg>
+  </div>
+  <div>
+    <div class="title">Text to PDF</div>
+    <div class="desc">Create a PDF from plain text</div>
+  </div>
+</a>
 
-</div>
-
-<!-- ABOUT -->
-<div class="about">
-  <h3>About</h3>
-  <p>Fast ⚡ Secure 🔒 No Upload Required</p>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
+  © 2026 My PDF Tools  
+  <br><br>
   <a href="privacy.html">Privacy Policy</a> |
   <a href="about.html">About Us</a> |
   <a href="contact.html">Contact</a>
 </div>
 
 <script>
-function searchTool() {
-  let input = document.getElementById("search").value.toLowerCase();
-  let cards = document.querySelectorAll(".card");
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("active");
+}
 
-  cards.forEach(card => {
-    let text = card.innerText.toLowerCase();
-    card.style.display = text.includes(input) ? "flex" : "none";
+function searchTool(){
+  let input=document.getElementById("search").value.toLowerCase();
+  let cards=document.querySelectorAll(".card");
+
+  cards.forEach(card=>{
+    let text=card.innerText.toLowerCase();
+    card.style.display=text.includes(input)?"flex":"none";
   });
 }
 </script>

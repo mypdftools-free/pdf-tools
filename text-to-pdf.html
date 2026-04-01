@@ -1,180 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
-<title>Text to PDF Online Free | My PDF Tools</title>
-<meta name="description" content="Convert text to PDF online for free. Type or paste text and download as PDF instantly. No upload required.">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
-</script>
+<title>Text to PDF | My PDF Tools</title>
 
 <!-- PDF LIB -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Arial;
-  background: #f2f4f7;
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#e53935;
 }
 
 /* CONTAINER */
-.container {
-  padding: 16px;
+.container{
+padding:20px 16px;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+/* TITLE */
+h1{
+font-size:24px;
+margin-bottom:10px;
 }
 
-/* INPUTS */
-input, select, textarea {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  font-size: 14px;
+p{
+color:#666;
+font-size:14px;
+margin-bottom:20px;
 }
 
-/* TEXT AREA */
-textarea {
-  height: 220px;
-  resize: none;
+/* TEXTAREA */
+textarea{
+width:100%;
+height:250px;
+border-radius:16px;
+border:2px solid #f28b82;
+padding:14px;
+font-size:15px;
+outline:none;
+resize:none;
 }
 
 /* BUTTON */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 15px;
-  border: none;
-  border-radius: 14px;
-  background: #007bff;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+button{
+width:100%;
+margin-top:20px;
+padding:16px;
+border:none;
+border-radius:16px;
+background:#e53935;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
 }
 
-/* BACK */
-.back {
-  display: block;
-  margin: 15px;
-  text-decoration: none;
-  color: #007bff;
+button:hover{
+background:#d32f2f;
 }
 
-/* LOADER */
-.loader {
-  display: none;
-  text-align: center;
-  margin-top: 10px;
-  color: green;
+/* FOOTER */
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
+}
+
+.footer a{
+margin:0 6px;
+color:#007bff;
+text-decoration:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1 style="display:none;">Text to PDF Online Free</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">My PDF Tools</div>
+</div>
 
-<div class="navbar">Text to PDF</div>
-
-<a href="index.html" class="back">← Back</a>
-
+<!-- CONTENT -->
 <div class="container">
-  <div class="card">
 
-    <label>Document Title</label>
-    <input type="text" id="title" placeholder="Enter title">
+  <h1>Text to PDF</h1>
+  <p>Create a PDF document from plain text.</p>
 
-    <label>Font Size</label>
-    <select id="fontSize">
-      <option value="12">Small</option>
-      <option value="16" selected>Medium</option>
-      <option value="22">Large</option>
-    </select>
+  <textarea id="text" placeholder="Enter your text here..."></textarea>
 
-    <label>Enter Text</label>
-    <textarea id="content" placeholder="Type or paste your text here..."></textarea>
+  <button onclick="createPDF()">Create PDF</button>
 
-    <button onclick="generatePDF()">Convert to PDF</button>
+</div>
 
-    <div class="loader" id="loader">Generating PDF...</div>
-
-  </div>
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 My PDF Tools  
+  <br><br>
+  <a href="privacy.html">Privacy Policy</a> |
+  <a href="about.html">About Us</a> |
+  <a href="contact.html">Contact</a>
 </div>
 
 <script>
-function generatePDF() {
+function createPDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  let title = document.getElementById("title").value;
-  let content = document.getElementById("content").value;
-  let fontSize = parseInt(document.getElementById("fontSize").value);
+  let text = document.getElementById("text").value;
 
-  if (!content) {
-    alert("Enter text");
+  if(!text){
+    alert("Please enter some text");
     return;
   }
 
-  loader.style.display = "block";
+  let lines = doc.splitTextToSize(text, 180);
 
-  let y = 20;
+  doc.setFontSize(14);
+  doc.text(lines, 10, 20);
 
-  // TITLE
-  if (title) {
-    doc.setFontSize(18);
-    doc.text(title, 10, y);
-    y += 10;
-  }
-
-  // CONTENT
-  doc.setFontSize(fontSize);
-
-  let lines = doc.splitTextToSize(content, 180);
-
-  lines.forEach(line => {
-    if (y > 280) {
-      doc.addPage();
-      y = 20;
-    }
-    doc.text(line, 10, y);
-    y += fontSize * 0.5;
-  });
-
-  loader.style.display = "none";
-
-  doc.save("text-to-pdf.pdf");
+  doc.save("text.pdf");
 }
 </script>
 

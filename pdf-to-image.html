@@ -1,231 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
-<title>PDF to Image Online Free | My PDF Tools</title>
-<meta name="description" content="Convert PDF to images online for free. Extract all pages as images. No upload required. Fast and secure.">
+<title>PDF to Image | My PDF Tools</title>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
-</script>
-
-<!-- PDF JS -->
+<!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  font-family: -apple-system, Arial;
-  background: #f2f4f7;
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#e53935;
 }
 
 /* CONTAINER */
-.container {
-  padding: 16px;
+.container{
+padding:20px 16px;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+/* TITLE */
+h1{
+font-size:24px;
+margin-bottom:10px;
+}
+
+p{
+color:#666;
+font-size:14px;
+margin-bottom:20px;
 }
 
 /* DROP AREA */
-.drop-area {
-  border: 2px dashed #007bff;
-  padding: 25px;
-  border-radius: 14px;
-  text-align: center;
-  cursor: pointer;
-  background: #fafafa;
-}
-
-.drop-area:hover {
-  background: #eef5ff;
+.drop{
+border:2px dashed #ddd;
+border-radius:20px;
+padding:40px;
+text-align:center;
+color:#777;
+margin-bottom:20px;
+cursor:pointer;
 }
 
 /* FILE INFO */
-.file-info {
-  margin-top: 10px;
-  font-size: 14px;
+.file-box{
+background:#eee;
+padding:12px;
+border-radius:12px;
+margin-bottom:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-/* IMAGES */
-.images img {
-  width: 100%;
-  margin-top: 12px;
-  border-radius: 10px;
+/* PREVIEW */
+.preview{
+background:white;
+padding:10px;
+border-radius:16px;
+margin-bottom:20px;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
 }
 
 /* BUTTON */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 12px;
-  background: #007bff;
-  color: white;
-  font-size: 15px;
+.download-btn{
+display:block;
+width:100%;
+padding:14px;
+background:#e53935;
+color:white;
+text-align:center;
+border-radius:14px;
+text-decoration:none;
+font-weight:bold;
+margin-bottom:20px;
 }
 
-/* LOADER */
-.loader {
-  display: none;
-  text-align: center;
-  margin-top: 10px;
-  color: green;
+/* FOOTER */
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
+}
+
+.footer a{
+margin:0 6px;
+color:#007bff;
+text-decoration:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1 style="display:none;">PDF to Image Online Free</h1>
-
-<div class="navbar">PDF to Image</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">My PDF Tools</div>
+</div>
 
 <div class="container">
-<div class="card">
 
-<div class="drop-area" id="drop">
-  Click or Drag PDF File
+<h1>PDF to Image</h1>
+<p>Convert each page of a PDF to a JPG image.</p>
+
+<!-- DROP -->
+<div class="drop" onclick="fileInput.click()">
+  Drop a PDF here<br>
+  <small>Max 50MB per file</small>
 </div>
 
 <input type="file" id="fileInput" accept="application/pdf" hidden>
 
-<div class="file-info" id="fileInfo"></div>
-
-<button onclick="convert()">Convert to Images</button>
-
-<button onclick="downloadAll()">Download All Pages</button>
-
-<div class="loader" id="loader">Processing pages...</div>
-
-<div class="images" id="output"></div>
+<div id="fileInfo"></div>
+<div id="output"></div>
 
 </div>
+
+<!-- FOOTER -->
+<div class="footer">
+© 2026 My PDF Tools  
+<br><br>
+<a href="privacy.html">Privacy Policy</a> |
+<a href="about.html">About Us</a> |
+<a href="contact.html">Contact</a>
 </div>
 
 <script>
-let pdfFile = null;
-let images = [];
-
-const drop = document.getElementById("drop");
 const fileInput = document.getElementById("fileInput");
+const fileInfo = document.getElementById("fileInfo");
+const output = document.getElementById("output");
 
-// CLICK
-drop.onclick = () => fileInput.click();
+fileInput.addEventListener("change", handleFile);
 
-// DRAG DROP
-drop.ondragover = e => {
-  e.preventDefault();
-  drop.style.background = "#eef5ff";
-};
+function handleFile(){
+  const file = fileInput.files[0];
+  if(!file) return;
 
-drop.ondragleave = () => {
-  drop.style.background = "#fafafa";
-};
+  fileInfo.innerHTML = `
+    <div class="file-box">
+      ${file.name} (${Math.round(file.size/1024)} KB)
+      <span onclick="clearFile()" style="color:red;cursor:pointer;">✖</span>
+    </div>
+  `;
 
-drop.ondrop = e => {
-  e.preventDefault();
-  pdfFile = e.dataTransfer.files[0];
-  fileInfo.innerText = pdfFile.name;
-};
+  const reader = new FileReader();
+  reader.readAsArrayBuffer(file);
 
-// FILE SELECT
-fileInput.onchange = e => {
-  pdfFile = e.target.files[0];
-  fileInfo.innerText = pdfFile.name;
-};
+  reader.onload = function(){
+    const typedArray = new Uint8Array(this.result);
 
-// CONVERT
-async function convert() {
-  if (!pdfFile) {
-    alert("Upload PDF");
-    return;
+    pdfjsLib.getDocument(typedArray).promise.then(pdf => {
+      output.innerHTML = "";
+
+      for(let i=1;i<=pdf.numPages;i++){
+        pdf.getPage(i).then(page => {
+
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          page.render({ canvasContext: context, viewport }).promise.then(() => {
+
+            const imgURL = canvas.toDataURL("image/jpeg");
+
+            const div = document.createElement("div");
+            div.innerHTML = `
+              <div class="preview">
+                <img src="${imgURL}" style="width:100%;border-radius:10px;">
+              </div>
+              <a class="download-btn" href="${imgURL}" download="page-${i}.jpg">
+                Download page-${i}.jpg
+              </a>
+            `;
+
+            output.appendChild(div);
+
+          });
+
+        });
+      }
+
+    });
   }
+}
 
-  loader.style.display = "block";
+function clearFile(){
+  fileInput.value = "";
+  fileInfo.innerHTML = "";
   output.innerHTML = "";
-  images = [];
-
-  let pdf = await pdfjsLib.getDocument(URL.createObjectURL(pdfFile)).promise;
-
-  fileInfo.innerText = pdfFile.name + " | Pages: " + pdf.numPages;
-
-  for (let i = 1; i <= pdf.numPages; i++) {
-    let page = await pdf.getPage(i);
-    let viewport = page.getViewport({ scale: 1.5 });
-
-    let canvas = document.createElement("canvas");
-    let ctx = canvas.getContext("2d");
-
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-
-    await page.render({ canvasContext: ctx, viewport }).promise;
-
-    let imgURL = canvas.toDataURL("image/png");
-    images.push(imgURL);
-
-    let img = document.createElement("img");
-    img.src = imgURL;
-
-    let btn = document.createElement("button");
-    btn.innerText = "Download Page " + i;
-    btn.onclick = () => downloadImage(imgURL, i);
-
-    output.appendChild(img);
-    output.appendChild(btn);
-  }
-
-  loader.style.display = "none";
-}
-
-// DOWNLOAD SINGLE
-function downloadImage(data, page) {
-  let link = document.createElement("a");
-  link.href = data;
-  link.download = "page-" + page + ".png";
-  link.click();
-}
-
-// DOWNLOAD ALL
-function downloadAll() {
-  if (images.length === 0) {
-    alert("Convert first");
-    return;
-  }
-
-  images.forEach((img, i) => {
-    downloadImage(img, i + 1);
-  });
 }
 </script>
 

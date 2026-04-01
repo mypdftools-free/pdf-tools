@@ -1,283 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
 <title>Split PDF Online Free | My PDF Tools</title>
-<meta name="description" content="Split PDF pages online for free. Extract single page or page range. No upload required. Fast and secure.">
+<meta name="description" content="Extract pages from PDF easily. Free, secure and works in browser.">
 
-<!-- Google tag (gtag.js) -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-4F4E51SPE0');
 </script>
 
-<!-- PDF LIB -->
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  font-family: -apple-system, Arial;
-  background: #f2f4f7;
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.logo{
+font-weight:bold;
+color:#e53935;
+font-size:18px;
 }
 
 /* CONTAINER */
-.container {
-  padding: 16px;
+.container{
+padding:20px 16px;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  max-width: 500px;
-  margin: auto;
+h1{font-size:24px;}
+.subtitle{
+color:#666;
+margin-bottom:20px;
 }
 
-/* DROP AREA */
-.drop-area {
-  border: 2px dashed #007bff;
-  padding: 25px;
-  border-radius: 14px;
-  text-align: center;
-  cursor: pointer;
-  margin-bottom: 10px;
-  background: #fafafa;
+/* DROP */
+.drop{
+border:2px dashed #ddd;
+border-radius:20px;
+padding:45px 20px;
+text-align:center;
+background:white;
+cursor:pointer;
+transition:0.2s;
 }
 
-.drop-area:hover {
-  background: #eef5ff;
+.drop.active{
+border-color:#e53935;
+background:#fff5f5;
 }
 
-/* INPUTS */
-input[type="number"] {
-  padding: 10px;
-  margin: 6px;
-  width: 45%;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+/* ICON */
+.icon-box{
+width:70px;
+height:70px;
+background:#f1f3f6;
+border-radius:16px;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:auto;
+margin-bottom:12px;
+}
+
+/* TEXT */
+.drop-text{font-size:16px;}
+.small{font-size:13px;color:#888;}
+
+/* FILE */
+.file{
+margin-top:15px;
+background:#f1f3f6;
+padding:12px;
+border-radius:14px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.file span{
+font-size:14px;
+}
+
+/* INPUT */
+.input{
+margin-top:20px;
+}
+
+.input label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+}
+
+.input input{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid #ddd;
+font-size:14px;
 }
 
 /* BUTTON */
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 12px;
-  background: #007bff;
-  color: white;
-  font-size: 15px;
+button{
+width:100%;
+padding:14px;
+margin-top:20px;
+border:none;
+border-radius:14px;
+background:#e53935;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
 }
 
-/* FILE NAME */
-.file-name {
-  margin-top: 8px;
-  font-size: 14px;
-}
-
-/* MODE */
-.mode {
-  margin-top: 12px;
-  text-align: center;
-}
-
-/* LOADER */
-.loader {
-  display: none;
-  text-align: center;
-  margin-top: 10px;
-  color: green;
-}
-
-/* HINT */
-.hint {
-  font-size: 12px;
-  color: gray;
-  margin-top: 5px;
+/* FOOTER */
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1 style="display:none;">Split PDF Online Free</h1>
-
-<div class="navbar">Split PDF</div>
+<div class="header">
+  <div class="logo">My PDF Tools</div>
+</div>
 
 <div class="container">
-<div class="card">
 
-<div class="drop-area" id="dropArea">
-  Click or Drag PDF File
+<h1>Split PDF</h1>
+<div class="subtitle">Extract specific pages from a PDF file.</div>
+
+<!-- DROP -->
+<div class="drop" id="dropArea" onclick="fileInput.click()">
+
+  <div class="icon-box">
+    <svg width="32" height="32" stroke="#6b7280" fill="none" stroke-width="2">
+      <path d="M12 16V4"></path>
+      <path d="M8 8l4-4 4 4"></path>
+      <rect x="4" y="16" width="16" height="4" rx="2"></rect>
+    </svg>
+  </div>
+
+  <div class="drop-text">Drop a PDF here</div>
+  <div class="small">Max 50MB per file</div>
+
 </div>
 
 <input type="file" id="fileInput" accept="application/pdf" hidden>
 
-<div class="file-name" id="fileName"></div>
+<!-- FILE -->
+<div id="fileBox"></div>
 
-<!-- MODE -->
-<div class="mode">
-  <label>
-    <input type="radio" name="mode" value="single" checked>
-    Single Page
-  </label>
-
-  <label>
-    <input type="radio" name="mode" value="range">
-    Page Range
-  </label>
+<!-- INPUT -->
+<div class="input">
+  <label>Page range (e.g. 1–3, 5, 8–10)</label>
+  <input type="text" id="range" placeholder="1–3, 5, 8–10">
 </div>
-
-<!-- SINGLE -->
-<div id="singleInput">
-  <input type="number" id="singlePage" placeholder="Page number">
-</div>
-
-<!-- RANGE -->
-<div id="rangeInput" style="display:none;">
-  <input type="number" id="startPage" placeholder="Start">
-  <input type="number" id="endPage" placeholder="End">
-</div>
-
-<div class="hint">Pages start from 1</div>
 
 <button onclick="splitPDF()">Split PDF</button>
 
-<div class="loader" id="loader">Processing...</div>
-
 </div>
+
+<div class="footer">
+© 2026 My PDF Tools
 </div>
 
 <script>
-let file = null;
+let file=null;
 
-const dropArea = document.getElementById("dropArea");
-const fileInput = document.getElementById("fileInput");
+// SELECT
+fileInput.onchange=e=>{
+file=e.target.files[0];
+showFile();
+};
 
-// CLICK
-dropArea.onclick = () => fileInput.click();
+// DROP
+let drop=document.getElementById("dropArea");
 
-// DRAG DROP
-dropArea.addEventListener("dragover", e => {
-  e.preventDefault();
-  dropArea.style.background = "#eef5ff";
+drop.addEventListener("dragover",e=>{
+e.preventDefault();
+drop.classList.add("active");
 });
 
-dropArea.addEventListener("dragleave", () => {
-  dropArea.style.background = "#fafafa";
+drop.addEventListener("dragleave",()=>{
+drop.classList.remove("active");
 });
 
-dropArea.addEventListener("drop", e => {
-  e.preventDefault();
-  file = e.dataTransfer.files[0];
-  document.getElementById("fileName").innerText = file.name;
+drop.addEventListener("drop",e=>{
+e.preventDefault();
+drop.classList.add("active");
+file=e.dataTransfer.files[0];
+showFile();
 });
 
-// FILE SELECT
-fileInput.addEventListener("change", e => {
-  file = e.target.files[0];
-  document.getElementById("fileName").innerText = file.name;
-});
-
-// MODE SWITCH
-document.querySelectorAll('input[name="mode"]').forEach(radio => {
-  radio.addEventListener("change", () => {
-    let mode = document.querySelector('input[name="mode"]:checked').value;
-
-    document.getElementById("singleInput").style.display =
-      mode === "single" ? "block" : "none";
-
-    document.getElementById("rangeInput").style.display =
-      mode === "range" ? "block" : "none";
-  });
-});
+// SHOW FILE
+function showFile(){
+fileBox.innerHTML=`
+<div class="file">
+  <span>${file.name}</span>
+  <span>${(file.size/1024).toFixed(0)} KB ❌</span>
+</div>
+`;
+}
 
 // SPLIT
-async function splitPDF() {
-  const { PDFDocument } = PDFLib;
+async function splitPDF(){
+if(!file){
+alert("Upload PDF");
+return;
+}
 
-  if (!file) {
-    alert("Upload PDF");
-    return;
-  }
+let input=document.getElementById("range").value;
+if(!input){
+alert("Enter page range");
+return;
+}
 
-  let mode = document.querySelector('input[name="mode"]:checked').value;
-  let pages = [];
+const { PDFDocument } = PDFLib;
 
-  if (mode === "single") {
-    let p = parseInt(document.getElementById("singlePage").value) - 1;
+let bytes=await file.arrayBuffer();
+let pdf=await PDFDocument.load(bytes);
+let newPdf=await PDFDocument.create();
 
-    if (isNaN(p) || p < 0) {
-      alert("Enter valid page");
-      return;
-    }
+let pages=parseRange(input);
 
-    pages.push(p);
-  }
+let copied=await newPdf.copyPages(pdf,pages);
+copied.forEach(p=>newPdf.addPage(p));
 
-  if (mode === "range") {
-    let start = parseInt(document.getElementById("startPage").value) - 1;
-    let end = parseInt(document.getElementById("endPage").value) - 1;
+let final=await newPdf.save();
 
-    if (isNaN(start) || isNaN(end) || start < 0 || end < start) {
-      alert("Enter valid range");
-      return;
-    }
+download(final,"split.pdf");
+}
 
-    for (let i = start; i <= end; i++) pages.push(i);
-  }
-
-  loader.style.display = "block";
-
-  try {
-    const bytes = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(bytes);
-    const newPdf = await PDFDocument.create();
-
-    const copiedPages = await newPdf.copyPages(pdf, pages);
-    copiedPages.forEach(p => newPdf.addPage(p));
-
-    const finalPdf = await newPdf.save();
-
-    download(finalPdf, "split.pdf");
-  } catch (e) {
-    alert("Error processing PDF");
-  }
-
-  loader.style.display = "none";
+// PARSE RANGE
+function parseRange(str){
+let pages=[];
+str.split(",").forEach(part=>{
+if(part.includes("-")){
+let [a,b]=part.split("-").map(n=>parseInt(n)-1);
+for(let i=a;i<=b;i++) pages.push(i);
+}else{
+pages.push(parseInt(part)-1);
+}
+});
+return pages;
 }
 
 // DOWNLOAD
-function download(data, name) {
-  const blob = new Blob([data], { type: "application/pdf" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = name;
-  link.click();
+function download(data,name){
+let blob=new Blob([data],{type:"application/pdf"});
+let link=document.createElement("a");
+link.href=URL.createObjectURL(blob);
+link.download=name;
+link.click();
 }
 </script>
 

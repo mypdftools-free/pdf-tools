@@ -1,142 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SEO -->
 <title>About Us | My PDF Tools</title>
-<meta name="description" content="Learn about My PDF Tools. Free, fast and secure PDF tools that work directly in your browser without uploading files.">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4F4E51SPE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4F4E51SPE0');
-</script>
 
 <style>
-body {
-  font-family: -apple-system, Arial;
-  margin: 0;
-  background: #f4f6f9;
-  color: #333;
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:-apple-system,Arial;
+background:#f7f8fc;
+color:#222;
 }
 
-/* NAVBAR */
-.navbar {
-  background: #007bff;
-  color: white;
-  padding: 16px;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* BACK */
-.back {
-  display: block;
-  margin: 15px;
-  text-decoration: none;
-  color: #007bff;
+.logo{
+font-weight:bold;
+font-size:18px;
+color:#e53935;
 }
 
 /* CONTAINER */
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+.container{
+padding:20px 16px;
+max-width:900px;
+margin:auto;
 }
 
-/* CARD */
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+/* TEXT */
+h1{
+font-size:26px;
+margin-bottom:16px;
 }
 
-/* HEADINGS */
-h1 {
-  color: #007bff;
-}
-
-h2 {
-  margin-top: 20px;
-}
-
-/* LIST */
-ul {
-  padding-left: 20px;
+p{
+color:#666;
+line-height:1.7;
+font-size:15px;
+margin-bottom:16px;
 }
 
 /* FOOTER */
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
+.footer{
+text-align:center;
+padding:20px;
+font-size:13px;
+color:#666;
+}
+
+.footer a{
+margin:0 6px;
+color:#007bff;
+text-decoration:none;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1 style="display:none;">About My PDF Tools</h1>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">My PDF Tools</div>
+</div>
 
-<div class="navbar">About Us</div>
-
-<a href="index.html" class="back">← Back to Home</a>
-
+<!-- CONTENT -->
 <div class="container">
-<div class="card">
 
-<h1>About My PDF Tools</h1>
+<h1>About Us</h1>
 
-<p><strong>My PDF Tools</strong> is a free online platform designed to make working with PDF files simple, fast, and secure.</p>
+<p>
+My PDF Tools is a free, open-source collection of browser-based PDF utilities. 
+Our mission is to provide fast, private, and easy-to-use PDF tools without requiring any file uploads.
+</p>
 
-<h2>Our Mission</h2>
-<p>Our goal is to provide easy-to-use PDF tools that work directly in your browser without requiring uploads or installations.</p>
+<p>
+Every tool runs entirely in your browser using JavaScript. Your files never leave your device, 
+ensuring complete privacy and security.
+</p>
 
-<h2>What We Offer</h2>
-<ul>
-<li>Image to PDF</li>
-<li>PDF to Image</li>
-<li>Merge PDF</li>
-<li>Split PDF</li>
-<li>Rotate PDF</li>
-<li>Add Watermark</li>
-<li>Text to PDF</li>
-</ul>
-
-<h2>Why Choose Us?</h2>
-<ul>
-<li>Fast and simple tools</li>
-<li>100% secure (no file upload)</li>
-<li>Works on mobile and desktop</li>
-<li>Completely free to use</li>
-</ul>
-
-<h2>Privacy First</h2>
-<p>We respect your privacy. All file processing happens in your browser, and we do not store or access your files.</p>
-
-<h2>Our Vision</h2>
-<p>We aim to become a reliable and widely used platform for free PDF tools, helping users worldwide handle documents easily.</p>
-
-<h2>Contact</h2>
-<p>If you have any questions or suggestions, feel free to contact us:</p>
-<p><strong>Email:</strong> sksaidulu1008@gmail.com</p>
+<p>
+Built with modern web technologies including pdf-lib, jsPDF, and PDF.js.
+</p>
 
 </div>
-</div>
 
-<footer>
-© 2026 My PDF Tools • All Rights Reserved
-</footer>
+<!-- FOOTER -->
+<div class="footer">
+© 2026 My PDF Tools. All processing is done in your browser.
+<br><br>
+<a href="privacy.html">Privacy Policy</a> |
+<a href="about.html">About Us</a> |
+<a href="contact.html">Contact</a>
+</div>
 
 </body>
 </html>
